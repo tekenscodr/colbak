@@ -17,7 +17,12 @@ router.get('/figures', Votes.votesFigures)
 router.get('/percentage', Votes.percentageVotes)
 router.get('/allvotes', Votes.regionalResults)
 router.get('/allusers', AuthController.getAllUsers)
-router.get('/getuser', AuthController.getUser)
+// router.get('/getuser', AuthController.getUser)
+router.get('/user/:id', AuthController.getUser)
 router.get('/constituency-votes', Votes.getAllVotesWithConstituencies)
+
+//UPDATE REQUEST
+router.put("/disable/:id", AuthController.disableUser)
+router.put('/editUser/:id', AuthController.editUser)
 
 module.exports = router;

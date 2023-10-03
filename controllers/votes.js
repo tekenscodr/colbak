@@ -3,6 +3,12 @@ const Vote = require('../models/votes')
 const Users = require('../models/user')
 const axios = require('axios')
 const { json } = require('express')
+const multer = require('multer');
+const { any } = require('joi')
+const storage = multer.memoryStorage(); // This stores the file in memory as a buffer
+const upload = multer({ storage: storage });
+
+
 module.exports = {
     // ALL VOTES CAST FOR EACH CANDIDATE
     
@@ -170,9 +176,17 @@ module.exports = {
   //   .catch((error) => {
   //     console.error('Error:', error);
   //   });
+  
+
+  // Define storage for uploaded images
+
 
   postVote : async(req, res, next) => {
     try {
+      if (!req.file) {
+        return res.status(400).json({ message: 'No image uploaded' });
+      }
+      const imageBuffer = req.file.buffer;
       const result = await req.body;
       const votesCast = new Vote(result)
       const savedVotes = await votesCast.save();

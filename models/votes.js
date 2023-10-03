@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const bcrypt = require('bcryptjs')
-// const ticket =require('./qrcode-model')
 
 
 const voteSchema = new Schema({
@@ -18,7 +17,11 @@ const voteSchema = new Schema({
             type: Number,
             required: true,
         }
-    }],  
+    }],
+    image: {
+        type: String,
+        // required: true,
+    } 
 },
 {timestamp: true},
 )
