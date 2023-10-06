@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const createError = require('http-errors')
+const User = require('./models/user')
 // const customer = require('./models/customer')
 // const { verifyAccessToken } = require('./helpers/jwt_helper')
 // const { getEvents } = require('./controllers/events')
@@ -28,7 +29,8 @@ app.use(cors())
 
 //Routes from server
 app.get('/', (req, res)=>{
-    res.send("You are in the server");
+res.send("You are in the server");
+   
 })
 
 // app.get('/getuser', verifyAccessToken, async (req, res, next)=>{

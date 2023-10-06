@@ -31,12 +31,10 @@ login: async(req, res, next) => {
         const result = await loginSchema.validateAsync(req.body)
         const user = await User.findOne({ phoneNumber: result.phoneNumber })
         if (!user) throw createError.NotFound("User not registered")
-        
-        //TODO: add if empty to api
-
+        if (user.isDisabled === true) throw new Error('User is disabled')
         const isMatch = await user.isValidPassword(result.password)
         if (!isMatch)
-            throw createError.Unauthorized("phoneNumber/password not valid");
+            throw createError.Unauthorized("Password not valid");
 
         const token = await signAccessToken(user.id);
             // const refreshToken = await signRefreshToken(customer.id)
@@ -45,8 +43,8 @@ login: async(req, res, next) => {
             // res.setHeader('Content-Type', 'application/json'); // This will cause the error
 
     } catch (error) {
-        if (error.isJoi === true)
-            res.status(500).json("Invalid phoneNumber/Password " + `${error}`)
+        if (error.isJoi === true || error)
+            res.status(500).json(`${error}`)
         next(error)   
     }
 },
@@ -54,7 +52,7 @@ login: async(req, res, next) => {
 //Set the router? 
 getUser: async(req, res, next ) => {
     try {
-        const person = await req.body
+        const person = await req.params.id
         const resp = await User.findById({_id : person})
         return res.status(200).json({status:200, message: "success", resp})
     } catch (error) {
@@ -70,6 +68,36 @@ getAllUsers: async(req, res, next) =>{
     } catch (error) {
         next();
         return res.status(500).json({status:200, message: `Error: ${error}`})
+    }
+},
+
+disableUser: async(req, res, next) => {
+    try {
+        const id = await req.params.id;
+        const user = await User.findOneAndUpdate(
+            {_id:id}, 
+            {isDisabled:true},
+            {new: true})
+        if(!user)throw createError(401, 'Could not update');
+        return res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json(error)
+        next();
+    }
+},
+editUser:   async(req, res, next) => {
+    try {
+        const id = await req.params.id;
+        const body = await req.body;
+        const user = User.findOneAndUpdate(
+            {_id: id},
+            {body},
+            {new: true}
+            )
+            if(!user) throw createError(401, 'Could not update user');
+            return res.status(200).json(user); 
+    } catch (error) {
+        
     }
 }
 }
