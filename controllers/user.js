@@ -43,8 +43,10 @@ login: async(req, res, next) => {
             // res.setHeader('Content-Type', 'application/json'); // This will cause the error
 
     } catch (error) {
-        if (error.isJoi === true || error)
+        if (error.isJoi === true || error) {
             res.status(500).json(`${error}`)
+        }
+        res.status(500).json(error)
         next(error)   
     }
 },
