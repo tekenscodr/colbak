@@ -34,7 +34,7 @@ login: async(req, res, next) => {
         if (user.isDisabled === true) throw new Error('User is disabled')
         const isMatch = await user.isValidPassword(result.password)
         if (!isMatch)
-            throw createError.Unauthorized("Password not valid");
+            res.status(500).json("Please Enter the right password")
 
         const token = await signAccessToken(user.id);
             // const refreshToken = await signRefreshToken(customer.id)
@@ -46,7 +46,7 @@ login: async(req, res, next) => {
         if (error.isJoi === true || error) {
             res.status(500).json(`${error}`)
         }
-        res.status(500).json(error)
+        res.status(500).json(`Phone Number or Password is not valid ${error}`)
         next(error)   
     }
 },
