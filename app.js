@@ -2,15 +2,8 @@ const express = require('express')
 const morgan = require('morgan')
 const createError = require('http-errors')
 const User = require('./models/user')
-// const customer = require('./models/customer')
-// const { verifyAccessToken } = require('./helpers/jwt_helper')
-// const { getEvents } = require('./controllers/events')
-// require('./helpers/init_redis')
 require('./helpers/init_mongo')
 const AuthRoute = require('./routes/auth')
-// const Events = require('./routes/events')
-// const Qrcode = require('./routes/qrcode')
-// const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 const cors = require('cors');
 require('dotenv').config();
@@ -18,7 +11,6 @@ const app = express()
 const port = process.env.PORT || 3000
 //middleware
 app.use(morgan('dev'))
-// app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 // app.use('/uploads/', express.static('uploads'))
@@ -29,24 +21,10 @@ app.use(cors())
 
 //Routes from server
 app.get('/', (req, res)=>{
-res.send("You are in the server");
-   
+    res.send("You are in the server"); 
 })
 
-// app.get('/getuser', verifyAccessToken, async (req, res, next)=>{
-//           try {
-//             let id = await req.payload;
-//             let user = await customer.findOne({_id:id}).exec()
-//             console.log(user)  
-//             return res.json({...user._doc});
-//         }catch(err) {
-//             next(err)
-//         }
-
-// })
 app.use('/auth', AuthRoute)
-// app.use('/events', Events)
-// app.use('/ticket', Qrcode)
 
 app.use(async(req, res, next) => {
     next(createError.NotFound())
