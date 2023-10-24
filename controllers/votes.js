@@ -182,10 +182,10 @@ module.exports = {
 
   postVote : async(req, res, next) => {
     try {
-      if (!req.file) {
-        return res.status(400).json({ message: 'No image uploaded' });
-      }
-      const imageBuffer = req.file.buffer;
+      // if (!req.file) {
+      //   return res.status(400).json({ message: 'No image uploaded' });
+      // }
+      // const imageBuffer = req.file.buffer;
       const result = await req.body;
       const votesCast = new Vote(result)
       const savedVotes = await votesCast.save();
