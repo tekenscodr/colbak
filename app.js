@@ -16,8 +16,17 @@ app.use(express.urlencoded({ extended: true }))
 // app.use('/uploads/', express.static('uploads'))
 
 
-//if you want in every domain then
-app.use(cors())
+// Configure CORS
+app.use(cors({
+  origin: 'https://election-azure.vercel.app', // Replace with your frontend URL
+  credentials: true, // Allow cookies/auth headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+// Handle preflight requests
+app.options('*', cors()); // Enable for all routes
+
 
 //Routes from server
 app.get('/', (req, res)=>{
