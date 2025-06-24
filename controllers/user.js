@@ -31,6 +31,7 @@ forgotPassword: async(req,res,next) => {
 try{
     const id = await req.params.id;
     const password = await req.body.password
+    console.log(password)
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 const user = User.findOneAndUpdate(
@@ -41,7 +42,8 @@ const user = User.findOneAndUpdate(
             if(!user) throw createError(401, 'Could not update user');
             return res.status(200).json(user);         
 } catch (error){
-    return res.status(500).json(error)
+    console.log(error)
+    return res.status(500).json({data:error.message})
 }
 },
 
