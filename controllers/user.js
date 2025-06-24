@@ -27,24 +27,53 @@ register: async(req, res, next) => {
         next(error)
     }
 },
-forgotPassword: async(req,res,next) => {
-try{
-    const id = await req.params.id;
-    const password = await req.body.password
-    console.log(password)
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
-const user = User.findOneAndUpdate(
-            {_id: id},
-            {password: hashedPassword},
-            {new: true}
-            )
-            if(!user) throw createError(401, 'Could not update user');
-            return res.status(200).json(user);         
-} catch (error){
-    console.log(error)
-    return res.status(500).json({data:error.message})
-}
+forgotPassword: async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+    
+    if (!password) {
+      throw createError(400, 'Password is required');
+    }
+
+    console.log('New password:', password);
+    
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    console.log('Hashed password:', hashedPassword);
+
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    if (!user) {
+      throw createError(404, 'User not found');
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password updated successfully',
+      user
+    });
+         
+  } catch (error) {
+    console.error('Password update error:', error);
+    
+    // Handle specific errors
+    if (error.name === 'CastError') {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Invalid user ID format'
+      });
+    }
+    
+    return res.status(error.status || 500).json({
+      success: false,
+      message: error.message || 'Failed to update password'
+    });
+  }
 },
 
 login: async(req, res, next) => {
