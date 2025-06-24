@@ -24,6 +24,6 @@ router.get('/constituency-votes', Votes.getAllVotesWithConstituencies)
 //UPDATE REQUEST
 router.put("/disable/:id", AuthController.disableUser)
 router.put('/editUser/:id', AuthController.editUser)
-router.put("/forgot-password", AuthController.forgotPassword)
+router.put("/forgot-password/:id", AuthController.forgotPassword)
 
 module.exports = router;
