@@ -25,6 +25,14 @@ register: async(req, res, next) => {
         next(error)
     }
 },
+forgotPassword: async(req,res,next) => {
+try{
+    const id = await req.params.id,
+    
+        
+} catch (error){
+}
+}
 
 login: async(req, res, next) => {
     try {
