@@ -43,7 +43,7 @@ const user = User.findOneAndUpdate(
 } catch (error){
     return res.status(500).json(error)
 }
-}
+},
 
 login: async(req, res, next) => {
     try {
