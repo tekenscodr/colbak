@@ -6,6 +6,8 @@ const {
     signRefreshToken,
     verifyAccessToken
 } = require('../helpers/jwt')
+const bcrypt = require('bcryptjs')
+
 
 module.exports = {
 register: async(req, res, next) => {
@@ -27,10 +29,19 @@ register: async(req, res, next) => {
 },
 forgotPassword: async(req,res,next) => {
 try{
-    const id = await req.params.id,
-    
-        
+    const id = await req.params.id;
+    const password = await req.body.password
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+const user = User.findOneAndUpdate(
+            {_id: id},
+            {password: hashedPassword},
+            {new: true}
+            )
+            if(!user) throw createError(401, 'Could not update user');
+            return res.status(200).json(user);         
 } catch (error){
+    return res.status(500).json(error)
 }
 }
 
