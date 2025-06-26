@@ -59,8 +59,3 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
-
-// const corsOption = {
-//     origin: ['https://tekensapp.vercel.app/'],
-// };
-//  app.use(cors(corsOption));
